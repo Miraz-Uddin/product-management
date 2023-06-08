@@ -13,7 +13,7 @@ export async function GetProfileInfo(user) {
   if (user) {
     status = "success";
     code = 200;
-    message = "User Logged in Successful";
+    message = "User Reached to Protected Route !!";
     data = { user };
   }
   return {

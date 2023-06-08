@@ -6,7 +6,7 @@ dotenv.config({
   path: "./.env",
 });
 
-export default function verifyToken(req, res, next) {
+export default function authenticate(req, res, next) {
   const token = req.headers["authorization"];
 
   if (!token) {
