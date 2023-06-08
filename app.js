@@ -41,7 +41,7 @@ app.use("/api/v1", router);
 app.use("*", (req, res) => {
   res.status(404).json({
     status: "failed",
-    data: "No Data Found",
+    data: "URL Not Found",
   });
 });
 

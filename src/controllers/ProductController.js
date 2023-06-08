@@ -1,37 +1,48 @@
-import Product from "../models/Product.js";
+import {
+  Delete,
+  Modify,
+  Search,
+  SearchById,
+  Store,
+} from "../services/ProductService.js";
 
 /**
  * Retrieve all products
  */
 export async function getAllProducts(req, res) {
-  const allProducts = await Product.find().select("name price");
-  return res.status(200).json({
-    status: "success",
-    total: allProducts?.length,
-    data: allProducts,
-  });
+  const { status, code, message, data } = await Search({}, "name price");
+  res.status(code).send({ status, message, data });
+}
+
+/**
+ * Retrieve a Specific Product by ID
+ */
+export async function getSingleProduct(req, res) {
+  const { status, code, message, data } = await SearchById(req.params.id);
+  res.status(code).send({ status, message, data });
 }
 
 /**
  * Create a new Product
  */
-export function storeProduct(req, res) {
-  const newProduct = new Product(req.body);
-  newProduct
-    .save()
-    .then((data) => {
-      res.status(200).send({
-        status: "success",
-        data,
-      });
-    })
-    .catch((err) => {
-      console.log(err?.errors?.title?.message);
-      res.status(404).send({
-        status: "failed",
-        data: {
-          error: err?.errors?.title,
-        },
-      });
-    });
+export async function storeProduct(req, res) {
+  const { status, code, message, data } = await Store(req.body);
+  res.status(code).send({ status, message, data });
+}
+
+/**
+ * Update an Existing Product
+ */
+export async function modifyProduct(req, res) {
+  const filterParam = { _id: req.params.id };
+  const { status, code, message, data } = await Modify(filterParam, req.body);
+  res.status(code).send({ status, message, data });
+}
+
+/**
+ * Delete an Existing Product
+ */
+export async function deleteProduct(req, res) {
+  const { status, code, message, data } = await Delete({ _id: req.params.id });
+  res.status(code).send({ status, message, data });
 }
